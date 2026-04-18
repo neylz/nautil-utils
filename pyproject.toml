@@ -21,10 +21,10 @@ classifiers = [
 ]
 
 dependencies = [
-  "nautil>=1.2.0<2.0.0",
-  "gitdb>=4.0.12<5.0.0",
-  "GitPython>=3.1.46<4.0.0",
-  "smmap>=5.0.3<6.0.0",
+  "nautil>=1.2.0,<2.0.0",
+  "gitdb>=4.0.12,<5.0.0",
+  "GitPython>=3.1.46,<4.0.0",
+  "smmap>=5.0.3,<6.0.0",
 ]
 
 dynamic = ["version"]
