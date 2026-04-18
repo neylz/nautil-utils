@@ -3,8 +3,8 @@ requires = ["setuptools>=69", "setuptools-scm[toml]>=8", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "nautil-us"
-description = "Nautil-us (UtilS) is a collection of utilities and tools for the Nautil toolkit."
+name = "nautil-utils"
+description = "Nautil-utils is a collection of utilities and tools for the Nautil toolkit."
 readme = "README.md"
 requires-python = ">=3.10"
 keywords = ["plugin", "nautil"]
@@ -20,14 +20,18 @@ classifiers = [
   "Operating System :: OS Independent",
 ]
 
-dynamic = ["version", "dependencies"]
+dependencies = [
+  "nautil>=1.2.0<2.0.0",
+  "gitdb>=4.0.12<5.0.0",
+  "GitPython>=3.1.46<4.0.0",
+  "smmap>=5.0.3<6.0.0",
+]
 
-[tool.setuptools.dynamic]
-dependencies = {file = ["requirements.txt"]}
+dynamic = ["version"]
 
 
 [tool.setuptools.packages.find]
-include = ["nautil*"]
+include = ["nautil_utils*"]
 
 [tool.setuptools_scm]
 tag_regex = "^(?P<version>\\d+\\.\\d+\\.\\d+)$"
