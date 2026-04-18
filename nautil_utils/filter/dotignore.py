@@ -2,7 +2,7 @@ import re
 from os import path
 from typing import List, Pattern, Tuple
 
-from nautil_us.types import FileNamePredicate
+from nautil_utils.types import FileNamePredicate
 
 
 def _normalize_posix_path(file_path: str) -> str:

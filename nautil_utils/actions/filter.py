@@ -4,7 +4,7 @@ import shutil
 from nautil.plugin import action
 from nautil import Artifact
 
-from nautil_us.types import FileNamePredicate
+from nautil_utils.types import FileNamePredicate
 
 
 @action("filter_name")

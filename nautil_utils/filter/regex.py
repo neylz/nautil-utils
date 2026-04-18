@@ -1,6 +1,6 @@
 from re import Pattern
 
-from nautil_us.types import FileNamePredicate
+from nautil_utils.types import FileNamePredicate
 
 
 def make_regex_predicate(pattern: Pattern, _: str) -> FileNamePredicate:
