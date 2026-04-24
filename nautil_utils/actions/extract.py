@@ -7,6 +7,13 @@ from nautil import Artifact
 
 @action("extract")
 def extract(artifact: Artifact, archive_path: str, dest_path: str = ".", overwrite: bool = True):
+    """
+    Extracts an archive file (e.g., .zip, .tar.gz) to a specified destination directory within the artifact's workspace.
+    
+    @param archive_path: The relative path to the archive file to extract.
+    @param dest_path: The relative path to the destination directory where the archive should be extracted (default: current directory).
+    @param overwrite: Whether to overwrite existing files in the destination directory (default: True). If False, an error will be raised if the destination directory is not empty.
+    """
 
     def step(workspace: str):
         print(f"extract({archive_path} -> {dest_path})")

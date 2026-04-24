@@ -6,6 +6,12 @@ from nautil import Artifact
 
 @action("touch")
 def touch(artifact: Artifact, file_path: str, create_parents: bool = True):
+    """
+    Creates an empty file at the specified path within the artifact's workspace, or updates the modification time if the file already exists.
+    
+    @param file_path: The relative path to the file to create or update.
+    @param create_parents: Whether to create parent directories if they don't exist (default: True).
+    """
 
     def step(workspace: str):
         print(f"touch({file_path})")

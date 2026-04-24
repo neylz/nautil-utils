@@ -7,6 +7,11 @@ from nautil import Artifact
 
 @action("json_minify")
 def json_minify(artifact: Artifact, remove_spaces=True):
+    """
+    Minifies JSON files in the artifact's workspace by removing unnecessary whitespace.
+
+    @param remove_spaces: Whether to have spaces or not between separators "," and ":" (default: True).
+    """
     
     def step(workspace):
         print("json_minify")

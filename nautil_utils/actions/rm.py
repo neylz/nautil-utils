@@ -7,6 +7,13 @@ from nautil import Artifact
 
 @action("rm")
 def rm(artifact: Artifact, target_path: str, recursive: bool = True, missing_ok: bool = True):
+    """
+    Removes a file or directory at the specified path within the artifact's workspace.
+    
+    @param target_path: The relative path to the file or directory to remove.
+    @param recursive: Whether to remove directories recursively (default: True). If False, an error will be raised if the target is a non-empty directory.
+    @param missing_ok: Whether to ignore the error if the target path does not exist (default: True).
+    """
 
     def step(workspace: str):
         print(f"rm({target_path})")

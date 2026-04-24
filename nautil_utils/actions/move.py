@@ -7,6 +7,12 @@ from nautil import Artifact
 
 @action("move")
 def move(artifact: Artifact, source_path: str, dest_path: str):
+    """
+    Moves a file or directory from source_path to dest_path within the artifact's workspace.
+    
+    @param source_path: The relative path to the source file or directory.
+    @param dest_path: The relative path to the destination directory or file.
+    """
 
     def step(workspace):
         print(f"move({source_path} -> {dest_path})")

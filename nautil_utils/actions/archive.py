@@ -13,6 +13,14 @@ def _resolve_path(workspace: str, value: str) -> str:
 
 @action("archive")
 def archive(artifact: Artifact, source_path: str, output_path: str, archive_format: str = "zip", overwrite: bool = True):
+    """
+    Archives a file or directory at the specified path within the artifact's workspace into a zip or tar archive.
+
+    @param source_path: The relative path to the file or directory to archive.
+    @param output_path: The relative path to the output archive file to create.
+    @param archive_format: The format of the archive to create (default: "zip"). Supported formats: "zip", "tar", "gztar".
+    @param overwrite: Whether to overwrite the output archive if it already exists (default: True).
+    """
 
     def step(workspace: str):
         print(f"archive({source_path} -> {output_path}, format={archive_format})")

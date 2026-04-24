@@ -7,6 +7,13 @@ from nautil import Artifact
 
 @action("cp")
 def cp(artifact: Artifact, source_path: str, dest_path: str, overwrite: bool = True):
+    """
+    Copies a file or directory from source_path to dest_path within the artifact's workspace.
+
+    @param source_path: The relative path to the source file or directory to copy.
+    @param dest_path: The relative path to the destination where the file or directory should be copied.
+    @param overwrite: Whether to overwrite the destination if it already exists (default: True).
+    """
 
     def step(workspace: str):
         print(f"cp({source_path} -> {dest_path})")

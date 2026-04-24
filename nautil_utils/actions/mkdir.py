@@ -6,6 +6,13 @@ from nautil import Artifact
 
 @action("mkdir")
 def mkdir(artifact: Artifact, dir_path: str, parents: bool = True, exist_ok: bool = True):
+    """
+    Creates a directory at the specified path within the artifact's workspace.
+    
+    @param dir_path: The relative path to the directory to create.
+    @param parents: Whether to create parent directories if they don't exist (default: True).
+    @param exist_ok: Whether to raise an error if the directory already exists (default: True).
+    """
 
     def step(workspace: str):
         print(f"mkdir({dir_path})")

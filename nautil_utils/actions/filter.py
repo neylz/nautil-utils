@@ -9,6 +9,12 @@ from nautil_utils.types import FileNamePredicate
 
 @action("filter_name")
 def filter_name(artifact: Artifact, filter_func: FileNamePredicate) -> function:
+    """
+    Filters files and directories in the artifact's workspace based on a given predicate.
+
+    @param filter_func: A function that takes a relative path and the workspace path as input and returns True if the file/directory should be deleted, False otherwise.
+    """
+
     def step(workspace: str):
         print("filter_name")
         dirs_to_delete = []
