@@ -9,5 +9,5 @@ class LocalSource(Source):
         self.path = path
 
     def copy_files(self, dest: PathLike):
-        shutil.copytree(self.path, dest)
+        shutil.copytree(self.path, dest, dirs_exist_ok=True)
 
