@@ -15,16 +15,19 @@ def move(artifact: Artifact, source_path: str, dest_path: str):
     """
 
     def step(workspace):
-        print(f"move({source_path} -> {dest_path})")
+        _source_path = artifact.parset(source_path)
+        _dest_path = artifact.parset(dest_path)
 
-        source_full_path = source_path if os.path.isabs(source_path) else os.path.join(workspace, source_path)
-        dest_full_path = dest_path if os.path.isabs(dest_path) else os.path.join(workspace, dest_path)
+        artifact.log("move({} -> {})".format(_source_path, _dest_path))
+
+        source_full_path = _source_path if os.path.isabs(_source_path) else os.path.join(workspace, _source_path)
+        dest_full_path = _dest_path if os.path.isabs(_dest_path) else os.path.join(workspace, _dest_path)
 
         source_full_path = os.path.normpath(source_full_path)
         dest_full_path = os.path.normpath(dest_full_path)
 
         if not os.path.exists(source_full_path):
-            raise FileNotFoundError(f"Source path not found: {source_path}")
+            raise FileNotFoundError(f"Source path not found: {_source_path}")
 
         # `mv src existing_dir` moves src inside existing_dir.
         if os.path.isdir(dest_full_path):

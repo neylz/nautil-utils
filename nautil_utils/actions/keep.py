@@ -19,21 +19,24 @@ def keep(artifact: Artifact, relative_paths: List[str], root: str = ".", files=T
     """
     
     def step(workspace: str):
-        print(f"keep({root})")
+        _root = artifact.parset(root)
+        _relative_paths = [artifact.parset(rel) for rel in relative_paths]
+
+        artifact.log("keep(relative_paths={}, root={}, files={}, dirs={})".format(_relative_paths, _root, files, dirs))
 
         workspace_path = os.path.abspath(workspace)
-        root_path = root if os.path.isabs(root) else os.path.join(workspace_path, root)
+        root_path = _root if os.path.isabs(_root) else os.path.join(workspace_path, _root)
         root_path = os.path.normpath(root_path)
 
         if not os.path.exists(root_path):
-            print(f"Warning: root path '{root}' does not exist. Skipping.")
+            artifact.log(f"Warning: root path '{_root}' does not exist. Skipping.")
             return
 
         if os.path.commonpath([workspace_path, root_path]) != workspace_path:
-            raise ValueError(f"Root path '{root}' must be inside the workspace")
+            raise ValueError(f"Root path '{_root}' must be inside the workspace")
 
         keep_paths = []
-        for rel in relative_paths:
+        for rel in _relative_paths:
             if os.path.isabs(rel):
                 candidate = os.path.normpath(rel)
             else:
@@ -45,7 +48,7 @@ def keep(artifact: Artifact, relative_paths: List[str], root: str = ".", files=T
                     candidate = os.path.normpath(os.path.join(root_path, rel))
 
             if os.path.commonpath([root_path, candidate]) != root_path:
-                print(f"Warning: keep path '{rel}' is outside root '{root}'. Skipping.")
+                artifact.log(f"Warning: keep path '{rel}' is outside root '{_root}'. Skipping.")
                 continue
 
             keep_paths.append(candidate)

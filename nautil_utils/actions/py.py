@@ -17,9 +17,12 @@ def py(artifact: Artifact, script_path: str, execution_location: Optional[str] =
     """
 
     def step(workspace: str):
-        print(f"py({script_path})")
+        _script_path = artifact.parset(script_path)
+        _execution_location = artifact.parset(execution_location) if execution_location is not None else None
 
-        script_full_path = script_path if os.path.isabs(script_path) else os.path.join(workspace, script_path)
+        artifact.log("py(script_path={}, execution_location={})".format(_script_path, _execution_location))
+
+        script_full_path = _script_path if os.path.isabs(_script_path) else os.path.join(workspace, _script_path)
         script_full_path = os.path.normpath(script_full_path)
 
         if not os.path.isfile(script_full_path):
@@ -29,9 +32,9 @@ def py(artifact: Artifact, script_path: str, execution_location: Optional[str] =
             execution_full_path = workspace
         else:
             execution_full_path = (
-                execution_location
-                if os.path.isabs(execution_location)
-                else os.path.join(workspace, execution_location)
+                _execution_location
+                if os.path.isabs(_execution_location)
+                else os.path.join(workspace, _execution_location)
             )
             execution_full_path = os.path.normpath(execution_full_path)
 

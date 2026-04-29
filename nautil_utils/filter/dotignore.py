@@ -2,7 +2,7 @@ import re
 from os import path
 from typing import List, Pattern, Tuple
 
-from nautil_utils.types import FileNamePredicate
+from nautil_utils.types import FilePredicate
 
 
 def _normalize_posix_path(file_path: str) -> str:
@@ -94,7 +94,7 @@ def _load_rules(ignore_file_path: str) -> List[Tuple[bool, Pattern[str]]]:
     return rules
 
 
-def make_dotignore_predicate(ignore_file_name: str, workspace_relative: bool = True) -> FileNamePredicate:
+def make_dotignore_predicate(ignore_file_name: str, workspace_relative: bool = True) -> FilePredicate:
     """
     Creates a predicate function that checks if a file should be ignored based on a .ignore file.
 
@@ -118,7 +118,7 @@ def make_dotignore_predicate(ignore_file_name: str, workspace_relative: bool = T
     cached_workspace = None
     cached_rules: List[Tuple[bool, Pattern[str]]] = []
 
-    def predicate(file_name: str, workspace: str) -> bool:
+    def predicate(file_name: str, file_path: str, workspace: str) -> bool:
         nonlocal cached_workspace, cached_rules
 
         ignore_file_path = (
@@ -136,11 +136,13 @@ def make_dotignore_predicate(ignore_file_name: str, workspace_relative: bool = T
 
         if path.isabs(file_name):
             try:
-                file_name = path.relpath(file_name, workspace)
+                relative_target = path.relpath(file_name, workspace)
             except ValueError:
-                file_name = path.basename(file_name)
+                relative_target = path.basename(file_name)
+        else:
+            relative_target = f"{file_path}{file_name}" if file_path else file_name
 
-        file_path = _normalize_posix_path(file_name)
+        file_path = _normalize_posix_path(relative_target)
 
         ignored = False
         for negated, rule in cached_rules:

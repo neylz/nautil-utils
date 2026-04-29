@@ -16,15 +16,17 @@ def rm(artifact: Artifact, target_path: str, recursive: bool = True, missing_ok:
     """
 
     def step(workspace: str):
-        print(f"rm({target_path})")
+        _target_path = artifact.parset(target_path)
 
-        full_path = target_path if os.path.isabs(target_path) else os.path.join(workspace, target_path)
+        artifact.log("rm(target_path={}, recursive={}, missing_ok={})".format(_target_path, recursive, missing_ok))
+
+        full_path = _target_path if os.path.isabs(_target_path) else os.path.join(workspace, _target_path)
         full_path = os.path.normpath(full_path)
 
         if not os.path.exists(full_path):
             if missing_ok:
                 return
-            raise FileNotFoundError(f"Path not found: {target_path}")
+            raise FileNotFoundError(f"Path not found: {_target_path}")
 
         if os.path.isfile(full_path) or os.path.islink(full_path):
             os.remove(full_path)

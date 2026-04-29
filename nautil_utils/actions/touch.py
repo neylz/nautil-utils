@@ -14,9 +14,10 @@ def touch(artifact: Artifact, file_path: str, create_parents: bool = True):
     """
 
     def step(workspace: str):
-        print(f"touch({file_path})")
+        _file_path = artifact.parset(file_path)
+        artifact.log("touch(file_path={}, create_parents={})".format(_file_path, create_parents))
 
-        full_path = file_path if os.path.isabs(file_path) else os.path.join(workspace, file_path)
+        full_path = _file_path if os.path.isabs(_file_path) else os.path.join(workspace, _file_path)
         full_path = os.path.normpath(full_path)
 
         parent_dir = os.path.dirname(full_path)

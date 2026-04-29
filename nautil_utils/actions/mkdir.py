@@ -15,9 +15,11 @@ def mkdir(artifact: Artifact, dir_path: str, parents: bool = True, exist_ok: boo
     """
 
     def step(workspace: str):
-        print(f"mkdir({dir_path})")
+        _dir_path = artifact.parset(dir_path)
 
-        full_path = dir_path if os.path.isabs(dir_path) else os.path.join(workspace, dir_path)
+        artifact.log("mkdir(dir_path={}, parents={}, exist_ok={})".format(_dir_path, parents, exist_ok))
+
+        full_path = _dir_path if os.path.isabs(_dir_path) else os.path.join(workspace, _dir_path)
         full_path = os.path.normpath(full_path)
 
         if parents:

@@ -14,7 +14,7 @@ def json_minify(artifact: Artifact, remove_spaces=True):
     """
     
     def step(workspace):
-        print("json_minify")
+        artifact.log("json_minify(remove_spaces={})".format(remove_spaces))
 
         for root, dirs, files in os.walk(workspace):
             for file in files:
@@ -24,7 +24,8 @@ def json_minify(artifact: Artifact, remove_spaces=True):
                         try:
                             data = json.load(f)
                         except json.JSONDecodeError:
-                            continue # skip invalid json
+                            artifact.log(f"\tWarning: Invalid JSON in file '{file_path}'. Skipping.")
+                            continue
                     
                     with open(file_path, "w") as f:
                         if remove_spaces:

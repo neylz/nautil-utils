@@ -1,4 +1,3 @@
 from typing import Callable
 
-
-FileNamePredicate = Callable[[str, str], bool]
+FilePredicate = Callable[[str, str, str], bool]
