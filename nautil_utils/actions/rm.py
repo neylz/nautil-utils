@@ -1,5 +1,6 @@
 import os
 import shutil
+import stat
 
 from nautil.plugin import action
 from nautil import Artifact
@@ -15,6 +16,22 @@ def rm(artifact: Artifact, target_path: str, recursive: bool = True, missing_ok:
     @param missing_ok: Whether to ignore the error if the target path does not exist (default: True).
     """
 
+    def _ensure_writable(path: str) -> None:
+        try:
+            os.chmod(path, stat.S_IWRITE)
+        except OSError:
+            pass
+
+    def _rmtree_onexc(func, path, exc):
+        if isinstance(exc, PermissionError):
+            _ensure_writable(path)
+            try:
+                func(path)
+                return
+            except OSError:
+                pass
+        raise exc
+
     def step(workspace: str):
         _target_path = artifact.parset(target_path)
 
@@ -29,11 +46,15 @@ def rm(artifact: Artifact, target_path: str, recursive: bool = True, missing_ok:
             raise FileNotFoundError(f"Path not found: {_target_path}")
 
         if os.path.isfile(full_path) or os.path.islink(full_path):
-            os.remove(full_path)
+            try:
+                os.remove(full_path)
+            except PermissionError:
+                _ensure_writable(full_path)
+                os.remove(full_path)
             return
 
         if recursive:
-            shutil.rmtree(full_path)
+            shutil.rmtree(full_path, onexc=_rmtree_onexc)
         else:
             os.rmdir(full_path)
 

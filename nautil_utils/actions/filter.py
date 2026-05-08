@@ -1,5 +1,6 @@
 import os
 import shutil
+import stat
 
 from nautil.plugin import action
 from nautil import Artifact
@@ -17,6 +18,24 @@ def _to_predicate_args(relative_path: str):
         file_name = normalized
         file_path = ""
     return file_name, file_path
+
+
+def _ensure_writable(path: str) -> None:
+    try:
+        os.chmod(path, stat.S_IWRITE)
+    except OSError:
+        pass
+
+
+def _rmtree_onexc(func, path, exc):
+    if isinstance(exc, PermissionError):
+        _ensure_writable(path)
+        try:
+            func(path)
+            return
+        except OSError:
+            pass
+    raise exc
 
 
 @action("filter")
@@ -52,7 +71,7 @@ def filter(artifact: Artifact, filter_func: FilePredicate, root: str = ".") -> f
 
         for dir_path in dirs_to_delete:
             if os.path.isdir(dir_path):
-                shutil.rmtree(dir_path, ignore_errors=True)
+                shutil.rmtree(dir_path, onexc=_rmtree_onexc)
 
         for current_root, _, files in os.walk(start_path):
             for file in files:
@@ -60,7 +79,11 @@ def filter(artifact: Artifact, filter_func: FilePredicate, root: str = ".") -> f
                 relative_path = os.path.relpath(full_path, workspace)
                 file_name, file_path = _to_predicate_args(relative_path)
                 if filter_func(file_name, file_path, workspace) and os.path.isfile(full_path):
-                    os.remove(full_path)
+                    try:
+                        os.remove(full_path)
+                    except PermissionError:
+                        _ensure_writable(full_path)
+                        os.remove(full_path)
 
     
     return step
