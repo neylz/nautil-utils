@@ -7,19 +7,25 @@ from nautil import Artifact
 
 
 @action("json_set")
-def json_set(artifact: Artifact, file: PathLike, key: str, value: object):
+def json_set(artifact: Artifact, file: PathLike, key: str, value: object, cast: type = None):
     """
     Sets a value in JSON files in the artifact's workspace.
 
     @param file: The path to the JSON file.
     @param key: The key to set. Supports nested keys and array indices using dot notation (e.g. "parent.child[0].key").
     @param value: The value to set. Must be JSON-serializable.
+    @param cast: The type to cast the value to before setting (default: None).
     """
     
     def step(workspace):
         _file = artifact.parset(file)
         _key = artifact.parset(key)
         _value = artifact.parset(value) if isinstance(value, str) else value
+        if cast is not None:
+            try:
+                _value = cast(_value)
+            except (TypeError, ValueError) as exc:
+                raise ValueError(f"Unable to cast value to {cast}") from exc
 
         artifact.log("json_set(file={}, key={}, value={})".format(_file, _key, _value))
 
