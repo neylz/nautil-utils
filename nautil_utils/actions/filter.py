@@ -39,7 +39,7 @@ def _rmtree_onexc(func, path, exc):
 
 
 @action("filter")
-def filter(artifact: Artifact, filter_func: FilePredicate, root: str = ".") -> function:
+def filter(artifact: Artifact, filter_func: FilePredicate, root: str = "."):
     """
     Filters files and directories in the artifact's workspace based on a given predicate.
 
