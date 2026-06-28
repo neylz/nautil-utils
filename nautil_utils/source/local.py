@@ -5,11 +5,15 @@ from pathlib import Path
 
 from nautil.core import Source
 
+from nautil_utils.types import pathstroverload
+
 
 class LocalSource(Source):
+    @pathstroverload
     def __init__(self, path: PathLike):
         self.path = path
 
+    @pathstroverload
     def copy_files(self, dest: PathLike, src_path: PathLike, overwrite: bool = False):
         source_path = Path(self.path) / src_path
         dest_path = Path(dest)

@@ -8,6 +8,8 @@ import tempfile
 
 from nautil.core import Source
 
+from nautil_utils.types import pathstroverload
+
 
 class GitSource(Source):
     def __init__(self, git_url: str, branch: str = "main", specific_commit: str = None, depth: int = 1):
@@ -16,6 +18,7 @@ class GitSource(Source):
         self.specific_commit = specific_commit
         self.depth = depth
 
+    @pathstroverload
     def copy_files(self, dest: PathLike, src_path: PathLike, overwrite: bool = False):
         with tempfile.TemporaryDirectory() as tmp_dir:
             repo = git.Repo.clone_from(self.git_url, tmp_dir, branch=self.branch, depth=self.depth)

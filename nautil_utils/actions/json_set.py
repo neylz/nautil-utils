@@ -5,8 +5,11 @@ from pathlib import Path
 from nautil.plugin import action
 from nautil import Artifact
 
+from nautil_utils.types import pathstroverload
+
 
 @action("json_set")
+@pathstroverload
 def json_set(artifact: Artifact, file: PathLike, key: str, value: object, cast: type = None):
     """
     Sets a value in JSON files in the artifact's workspace.

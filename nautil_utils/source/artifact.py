@@ -5,6 +5,8 @@ import os
 
 from nautil.core import Artifact, Source
 
+from nautil_utils.types import pathstroverload
+
 _SUPPORTED_COMPRESSED_FORMATS = {
     "zip": ".zip",
     "tar": ".tar",
@@ -12,6 +14,7 @@ _SUPPORTED_COMPRESSED_FORMATS = {
 }
 
 class ArtifactSource(Source):
+    @pathstroverload
     def __init__(self, artifact: Artifact, root: PathLike = ".", compressed_format: str = None):
         """
         Creates a source from an existing artifact.
@@ -26,6 +29,7 @@ class ArtifactSource(Source):
         self.compressed_format = compressed_format
 
 
+    @pathstroverload
     def copy_files(self, dest: PathLike, src_path: PathLike, overwrite: bool = False):
         source_root = Path(self.path) / self.root
         if not source_root.is_dir():
